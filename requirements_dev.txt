@@ -1,0 +1,8 @@
+coverage
+flake8
+mypy
+pytest
+pytest-runner
+tox
+twine
+wheel
