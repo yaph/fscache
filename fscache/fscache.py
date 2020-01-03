@@ -5,6 +5,7 @@ import json
 
 import jsonpickle
 
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from slugify import slugify
@@ -12,6 +13,7 @@ from slugify import slugify
 
 def path(cache_id, cache_dir='', subdir_levels=0):
     # TODO if the cache_id contains slashes, create subdirs.
+    # TODO slugify cache_id
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(exist_ok=True, parents=True)
     return Path(cache_dir, cache_id)
@@ -37,4 +39,11 @@ def save(cache_file, data, encoding='text'):
 
 
 def valid(cache_file, lifetime):
-    pass
+    if not cache_file.exists():
+        return False
+
+    mtime = datetime.fromtimestamp(cache_file.lstat().st_mtime)
+    if datetime.now() - timedelta(seconds=lifetime) < mtime:
+        return True
+
+    return False

@@ -10,7 +10,7 @@ cache_file = fscache.path('test_fscache.json', cache_dir='.fscache/a/a/a/')
 
 
 def test_save():
-    fscache.save(cache_file, json.dumps(data), encoding='json')
+    fscache.save(cache_file, data, encoding='json')
     assert cache_file.exists()
 
 
