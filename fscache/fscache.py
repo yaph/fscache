@@ -10,10 +10,10 @@ from pathlib import Path
 from slugify import slugify
 
 
-def path(cache_id, cache_dir='.fscache', subdir_levels=2):
+def path(cache_id, cache_dir='', subdir_levels=0):
     # TODO if the cache_id contains slashes, create subdirs.
     cache_dir = Path(cache_dir)
-    cache_dir.mkdir(exist_ok=True)
+    cache_dir.mkdir(exist_ok=True, parents=True)
     return Path(cache_dir, cache_id)
 
 
