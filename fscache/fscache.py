@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # A Python package for caching data in the file system.
-# TODO use https://github.com/ActiveState/appdirs
 import json
 
 import jsonpickle
@@ -8,12 +7,15 @@ import jsonpickle
 from datetime import datetime, timedelta
 from pathlib import Path
 
+from appdirs import user_cache_dir
 from slugify import slugify
 
 
 def path(cache_id, cache_dir='', subdir_levels=0):
     # TODO if the cache_id contains slashes, create subdirs.
     # TODO slugify cache_id
+    if not cache_dir:
+        cache_dir = user_cache_dir('fscache')
     cache_dir = Path(cache_dir)
     cache_dir.mkdir(exist_ok=True, parents=True)
     return Path(cache_dir, cache_id)
