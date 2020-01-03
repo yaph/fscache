@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
+
 from string import ascii_lowercase
-import fscache
+
+from fscache import fscache
 
 
 data = list(ascii_lowercase)

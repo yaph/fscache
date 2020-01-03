@@ -5,6 +5,3 @@
 __author__ = """Ramiro Gómez"""
 __email__ = 'code@ramiro.org'
 __version__ = '0.1.0'
-
-
-from .fscache import path, load, save
