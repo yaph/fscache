@@ -11,14 +11,28 @@ from appdirs import user_cache_dir
 from slugify import slugify
 
 
-def path(cache_id, cache_dir='', subdir_levels=0):
-    # TODO if the cache_id contains slashes, create subdirs.
-    # TODO slugify cache_id
+def split_id(cache_id, sep):
+    parts = filter(None, cache_id.split(sep))
+    sub_dirs = [slugify(d) for d in parts[:-1]]
+    return sub_dirs, parts[-1]
+
+
+def path(cache_id, cache_dir='', create_dirs=True, split_char='', subdir_levels=0):
+    # TODO raise Exception if cache_dir is set but doesn't exist?
     if not cache_dir:
         cache_dir = user_cache_dir('fscache')
-    cache_dir = Path(cache_dir)
-    cache_dir.mkdir(exist_ok=True, parents=True)
-    return Path(cache_dir, cache_id)
+
+    # If you pass a full URL as a cache ID and use `/` as `split_char`, sub directories
+    # for the scheme, host, and the path directories will be created.
+    if split_char and split_char in cache_id:
+        sub_dirs, cache_id = split_id(cache_id, split_char)
+        cache_dir = Path(cache_dir, sub_dirs)
+
+    cache_path = Path(cache_dir, slugify(cache_id))
+    if create_dirs:
+        cache_path.parent.mkdir(exist_ok=True, parents=True)
+
+    return cache_path
 
 
 def load(cache_file, encoding='text'):
