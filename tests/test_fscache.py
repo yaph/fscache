@@ -49,4 +49,4 @@ def test_valid():
 
 
 def test_load():
-    assert fscache.load(cache_file, encoding='json') == data
+    assert fscache.load(cache_file, mode='json') == data

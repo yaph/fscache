@@ -76,14 +76,33 @@ def path(
     return cache_path
 
 
-def load(cache_file: Path, encoding: str = 'text'):
-    if encoding == 'text':
-        return cache_file.read_text()
-    elif encoding == 'json':
-        # Don't use jsonpickle for decoding for security concerns.
-        return json.loads(cache_file.read_text())
-    else:
+def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
+    """Return the content of the cache file.
+
+    Parameters
+    ----------
+    cache_file
+        The Path object representing the cache file.
+
+    mode
+        If `mode` is not set a text file is assumed. Set `mode` to `bytes` for binary files like images or PDF files.
+        Set to `json` to deserialize the file content into a Python object.
+
+    unsafe
+        This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
+        is decoded using `jsonpickle` which can execute arbitrary Python code.
+    """
+    if mode == 'bytes':
         return cache_file.read_bytes()
+
+    content = cache_file.read_text()
+    if mode == 'json':
+        if unsafe:
+            content = jsonpickle.decode(content)
+        else:
+            content = json.loads(content)
+
+    return content
 
 
 def save(cache_file: Path, data: Any, encoding: str = 'text'):
