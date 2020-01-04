@@ -23,7 +23,7 @@ def test_split_id():
 def test_slugify():
     tests = [
         ('/path/to/data.json', 'path-to-data.json'),
-        ('Gómez', 'gómez'),
+        ('Gómez', 'Gómez'),
         ('https://ramiro.org/index.html', 'https-ramiro.org-index.html')
     ]
     for t in tests:

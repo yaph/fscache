@@ -16,7 +16,7 @@ re_forbidden = re.compile(r'[^\.\w-]+')
 
 
 def slugify(s: str) -> str:
-    return re.sub(re_forbidden, '-', s.strip().lower()).strip('-')
+    return re.sub(re_forbidden, '-', s.strip()).strip('-')
 
 
 def split_id(cache_id: str, sep: str) -> Tuple[list, str]:
