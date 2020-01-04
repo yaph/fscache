@@ -32,7 +32,9 @@ def path(
     split_char: str = '',
     subdir_levels: int = 0) -> Path:
 
-    # TODO raise Exception if cache_dir is set but doesn't exist?
+    if cache_dir and not Path(cache_dir).exists():
+        raise FileNotFoundError('Cache directory does not exist: ' + cache_dir)
+
     if not cache_dir:
         cache_dir = user_cache_dir('fscache')
 
