@@ -35,13 +35,13 @@ def test_path_default_cache_dir():
     assert fscache.path('file.txt', create_dirs=False).as_posix() == f'{user_cache_dir("fscache")}/file.txt'
 
 
-def test_path_split_char():
+def test_path_url():
     tests = [
         ('https://www.youtube.com/watch?v=HEOxdMWxIBM', f'{cache_dir}/https/www.youtube.com/watch-v-HEOxdMWxIBM'),
         ('https://ramiro.org/vis/index.html', f'{cache_dir}/https/ramiro.org/vis/index.html')
     ]
     for t in tests:
-        assert fscache.path(t[0], cache_dir=cache_dir, create_dirs=False, split_char='/').as_posix() == t[1]
+        assert fscache.path(t[0], cache_dir=cache_dir, create_dirs=False).as_posix() == t[1]
 
 
 # Run these last

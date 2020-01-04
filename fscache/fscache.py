@@ -12,9 +12,6 @@ from typing import Any
 from appdirs import user_cache_dir
 
 
-__all__ = ['path', 'load', 'save', 'valid']
-
-
 re_forbidden = re.compile(r'[^\.\w]+')
 
 
@@ -28,32 +25,40 @@ def slugify(s: str) -> str:
     return re.sub(re_forbidden, '-', s.strip()).strip('-')
 
 
+def create_id(s: str, sep: str = '/') -> str:
+    """Create a cache ID for given string that is a valid file path.
+
+    Set `sep` to a valid directory separator to create sub directories as they occur in the string.
+    """
+    if sep and sep in s:
+        return sep.join([slugify(part) for part in s.split(sep)])
+    return slugify(s)
+
+
 def path(
         cache_id: str,
         *,  # keyword-only arguments
+        alpha_index: bool = False,
         cache_dir: str = '',
-        create_dirs: bool = True,
-        split_char: str = '') -> Path:
+        create_dirs: bool = True) -> Path:
     """Return a pathlib.Path object pointing to the cache file.
 
     Parameters
     ----------
     cache_id
-        A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
+        TODO A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
         underscore and period. Other characters will be replaced with a hyphen, which can result in name collisions.
 
+    alpha_index
+        TODO
+
     cache_dir
-        An optional string to specify the directory for storing cache files. If set and the directory does not exist an exception
+        TODO An optional string to specify the directory for storing cache files. If set and the directory does not exist an exception
         is raised. If not set files will be stored in the `fscache` directory within the operating system user cache directory.
 
     create_dirs
         An optional flag to control directory creation. By default the cache directory and all parents will be created as needed.
         Set this to `False` to prevent directory creation. Useful if you know the cache directory exists and for tests.
-
-    split_char
-        An optional string that will be used to split the `cache_id` into parts, which are turned into sub directories and only
-        the last part is the file name. If you use URLs as cache IDs and `/` as `split_char`, sub directories for the scheme,
-        host and path directories will be created.
     """
 
     if cache_dir and not Path(cache_dir).exists():
@@ -62,14 +67,7 @@ def path(
     if not cache_dir:
         cache_dir = user_cache_dir('fscache')
 
-    if split_char and split_char in cache_id:
-        parts = list(filter(None, cache_id.split(split_char)))
-        sub_dirs = [slugify(d) for d in parts[:-1]]
-        cache_id = parts[-1]
-        # Call `as_posix` so `cache_dir` stays a string.
-        cache_dir = Path(cache_dir, *sub_dirs).as_posix()
-
-    cache_path = Path(cache_dir, slugify(cache_id))
+    cache_path = Path(cache_dir, create_id(cache_id))
     if create_dirs:
         cache_path.parent.mkdir(exist_ok=True, parents=True)
 
