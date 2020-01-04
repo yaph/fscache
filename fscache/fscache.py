@@ -27,10 +27,31 @@ def split_id(cache_id: str, sep: str) -> Tuple[list, str]:
 
 def path(
     cache_id: str,
+    *,  # keyword-only arguments
     cache_dir: str = '',
     create_dirs: bool = True,
-    split_char: str = '',
-    subdir_levels: int = 0) -> Path:
+    split_char: str = '') -> Path:
+    """Return a pathlib.Path object pointing to the cache file.
+
+    Parameters
+    ----------
+    cache_id
+        A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
+        hyphen, underscore and period. Other characters will be replaced with hyphens, which can result in name collisions.
+
+    cache_dir
+        An optional string to specify the directory for storing cache files. If set and the directory does not exist an exception
+        is raised. If not set files will be stored in the `fscache` directory within the operating system user cache directory.
+
+    create_dirs
+        An optional flag to control directory creation. By default the cache directory and all parents will be created as needed.
+        Set this to `False` to prevent directory creation. Useful if you know the cache directory exists and for tests.
+
+    split_char
+        An optional string that will be used to split the `cache_id` into parts, which are turned into sub directories and only
+        the last part is the file name. If you use URLs as cache IDs and `/` as `split_char`, sub directories for the scheme,
+        host and path directories will be created.
+    """
 
     if cache_dir and not Path(cache_dir).exists():
         raise FileNotFoundError('Cache directory does not exist: ' + cache_dir)
@@ -38,8 +59,6 @@ def path(
     if not cache_dir:
         cache_dir = user_cache_dir('fscache')
 
-    # If you pass a full URL as a cache ID and use `/` as `split_char`, sub directories
-    # for the scheme, host, and the path directories will be created.
     if split_char and split_char in cache_id:
         sub_dirs, cache_id = split_id(cache_id, split_char)
         # Call `as_posix` so `cache_dir` stays a string.
