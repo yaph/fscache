@@ -105,16 +105,46 @@ def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
     return content
 
 
-def save(cache_file: Path, data: Any, encoding: str = 'text'):
-    if encoding == 'text':
-        cache_file.write_text(data)
-    elif encoding == 'json':
-        cache_file.write_text(jsonpickle.encode(data))
-    else:
+def save(cache_file: Path, data: Any, *, mode: str = None, unsafe: bool = False):
+    """Save data in cache file.
+
+    Parameters
+    ----------
+    cache_file
+        The Path object representing the cache file.
+
+    mode
+        If `mode` is not set a text file is assumed. Set `mode` to `bytes` for binary files like images or PDF files.
+        Set to `json` to serialize the data.
+
+    unsafe
+        This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
+        is encoded using `jsonpickle`. This is useful when the data contains Python objects like datetimes and sets.
+    """
+    if mode == 'bytes':
         cache_file.write_bytes(data)
+    else:
+        content = None
+        if mode == 'json':
+            if unsafe:
+                content = jsonpickle.encode(data)
+            else:
+                content = json.dumps(data)
+        cache_file.write_text(content)
 
 
 def valid(cache_file: Path, lifetime: int = None) -> bool:
+    """Check whether cache file is valid.
+
+    Parameters
+    ----------
+    cache_file
+        The Path object representing the cache file. Returns `False` if cache file doesn't exist.
+    lifetime
+        An integer value in seconds. If not set and the cache file exists returns `True`. Otherwise the lifetime is compared to
+        the file modification time.
+    """
+
     if not cache_file.exists():
         return False
 
