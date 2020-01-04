@@ -4,20 +4,19 @@ import json
 
 from string import ascii_lowercase
 
+from appdirs import user_cache_dir
+
 from fscache import fscache
 
-
+cache_dir = '.fscache'
 data = list(ascii_lowercase)
-cache_file = fscache.path('test_fscache.json', cache_dir='.fscache/a/a/a/')
+cache_file = fscache.path('test_fscache.json', cache_dir=cache_dir)
 
 
-def test_split_id():
-    tests = [
-        ('https://www.youtube.com/watch?v=HEOxdMWxIBM', (['https', 'www.youtube.com'], 'watch?v=HEOxdMWxIBM')),
-        ('https://ramiro.org/vis/index.html', (['https', 'ramiro.org', 'vis'], 'index.html'))
-    ]
-    for t in tests:
-        assert fscache.split_id(t[0], '/') == t[1]
+# Create a cache file first.
+def test_save():
+    fscache.save(cache_file, data, encoding='json')
+    assert cache_file.exists()
 
 
 def test_slugify():
@@ -31,9 +30,22 @@ def test_slugify():
         assert fscache.slugify(t[0]) == t[1]
 
 
-def test_save():
-    fscache.save(cache_file, data, encoding='json')
-    assert cache_file.exists()
+def test_path_default_cache_dir():
+    assert fscache.path('file.txt', create_dirs=False).as_posix() == f'{user_cache_dir("fscache")}/file.txt'
+
+
+def test_path_split_char():
+    tests = [
+        ('https://www.youtube.com/watch?v=HEOxdMWxIBM', f'{cache_dir}/https/www.youtube.com/watch-v-HEOxdMWxIBM'),
+        ('https://ramiro.org/vis/index.html', f'{cache_dir}/https/ramiro.org/vis/index.html')
+    ]
+    for t in tests:
+        assert fscache.path(t[0], cache_dir=cache_dir, create_dirs=False, split_char='/').as_posix() == t[1]
+
+
+# Run these last
+def test_valid():
+    assert fscache.valid(cache_file, lifetime=3600)
 
 
 def test_load():

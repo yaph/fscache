@@ -28,12 +28,6 @@ def slugify(s: str) -> str:
     return re.sub(re_forbidden, '-', s.strip()).strip('-')
 
 
-def split_id(cache_id: str, sep: str) -> Tuple[list, str]:
-    parts = list(filter(None, cache_id.split(sep)))
-    sub_dirs = [slugify(d) for d in parts[:-1]]
-    return sub_dirs, parts[-1]
-
-
 def path(
     cache_id: str,
     *,  # keyword-only arguments
@@ -69,7 +63,9 @@ def path(
         cache_dir = user_cache_dir('fscache')
 
     if split_char and split_char in cache_id:
-        sub_dirs, cache_id = split_id(cache_id, split_char)
+        parts = list(filter(None, cache_id.split(split_char)))
+        sub_dirs = [slugify(d) for d in parts[:-1]]
+        cache_id = parts[-1]
         # Call `as_posix` so `cache_dir` stays a string.
         cache_dir = Path(cache_dir, *sub_dirs).as_posix()
 

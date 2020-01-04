@@ -16,6 +16,7 @@ clean-pyc: ## remove Python file artifacts
 	find . -name '__pycache__' -exec rm -fr {} +
 
 clean-test: ## remove test and coverage artifacts
+	rm -fr .fscache/*
 	rm -fr .tox/
 	rm -f .coverage
 	rm -fr htmlcov/
