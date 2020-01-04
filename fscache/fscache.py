@@ -7,7 +7,7 @@ import jsonpickle
 
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, Tuple
+from typing import Any
 
 from appdirs import user_cache_dir
 
@@ -29,11 +29,11 @@ def slugify(s: str) -> str:
 
 
 def path(
-    cache_id: str,
-    *,  # keyword-only arguments
-    cache_dir: str = '',
-    create_dirs: bool = True,
-    split_char: str = '') -> Path:
+        cache_id: str,
+        *,  # keyword-only arguments
+        cache_dir: str = '',
+        create_dirs: bool = True,
+        split_char: str = '') -> Path:
     """Return a pathlib.Path object pointing to the cache file.
 
     Parameters
