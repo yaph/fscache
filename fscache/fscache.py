@@ -90,9 +90,12 @@ def save(cache_file: Path, data: Any, encoding: str = 'text'):
         cache_file.write_bytes(data)
 
 
-def valid(cache_file: Path, lifetime: int):
+def valid(cache_file: Path, lifetime: int = None) -> bool:
     if not cache_file.exists():
         return False
+
+    if not lifetime:
+        return True
 
     mtime = datetime.fromtimestamp(cache_file.lstat().st_mtime)
     if datetime.now() - timedelta(seconds=lifetime) < mtime:
