@@ -12,6 +12,9 @@ from typing import Any, Tuple
 from appdirs import user_cache_dir
 
 
+__all__ = ['path', 'load', 'save', 'valid']
+
+
 re_forbidden = re.compile(r'[^\.\w-]+')
 
 
