@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # A Python package for caching data in the file system.
 import json
+import re
 
 import jsonpickle
 
@@ -9,22 +10,19 @@ from pathlib import Path
 from typing import Any, Tuple
 
 from appdirs import user_cache_dir
-from slugify import slugify
+
+
+re_forbidden = re.compile(r'[^\.\w-]+')
+
+
+def slugify(s: str) -> str:
+    return re.sub(re_forbidden, '-', s.strip().lower()).strip('-')
 
 
 def split_id(cache_id: str, sep: str) -> Tuple[list, str]:
     parts = list(filter(None, cache_id.split(sep)))
     sub_dirs = [slugify(d) for d in parts[:-1]]
     return sub_dirs, parts[-1]
-
-
-def slugify_id(cache_id: str) -> str:
-    """Slugify `cache_id` retaining file extension."""
-
-    path_id = Path(cache_id)
-    if path_id.suffix:
-        return slugify(path_id.stem) + path_id.suffix
-    return slugify(cache_id)
 
 
 def path(
@@ -45,7 +43,7 @@ def path(
         # Call `as_posix` so `cache_dir` stays a string.
         cache_dir = Path(cache_dir, *sub_dirs).as_posix()
 
-    cache_path = Path(cache_dir, slugify_id(cache_id))
+    cache_path = Path(cache_dir, slugify(cache_id))
     if create_dirs:
         cache_path.parent.mkdir(exist_ok=True, parents=True)
 
