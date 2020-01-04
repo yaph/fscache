@@ -1,5 +1,6 @@
 coverage
 flake8
+ipython
 mypy
 pytest
 pytest-runner
