@@ -94,7 +94,7 @@ def valid(cache_file: Path, lifetime: int = None) -> bool:
     if not cache_file.exists():
         return False
 
-    if not lifetime:
+    if lifetime is None:
         return True
 
     mtime = datetime.fromtimestamp(cache_file.lstat().st_mtime)
