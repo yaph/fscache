@@ -21,6 +21,7 @@ def test_save():
 
 def test_slugify():
     tests = [
+        ('a - b', 'a-b'),
         ('/path/to/data.json', 'path-to-data.json'),
         ('Gómez', 'Gómez'),
         ('https://ramiro.org/index.html', 'https-ramiro.org-index.html'),

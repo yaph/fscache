@@ -15,7 +15,7 @@ from appdirs import user_cache_dir
 __all__ = ['path', 'load', 'save', 'valid']
 
 
-re_forbidden = re.compile(r'[^\.\w-]+')
+re_forbidden = re.compile(r'[^\.\w]+')
 
 
 def slugify(s: str) -> str:
@@ -40,7 +40,7 @@ def path(
     ----------
     cache_id
         A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
-        hyphen, underscore and period. Other characters will be replaced with hyphens, which can result in name collisions.
+        underscore and period. Other characters will be replaced with a hyphen, which can result in name collisions.
 
     cache_dir
         An optional string to specify the directory for storing cache files. If set and the directory does not exist an exception
