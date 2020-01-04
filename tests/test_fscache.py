@@ -24,7 +24,8 @@ def test_slugify():
     tests = [
         ('/path/to/data.json', 'path-to-data.json'),
         ('Gómez', 'Gómez'),
-        ('https://ramiro.org/index.html', 'https-ramiro.org-index.html')
+        ('https://ramiro.org/index.html', 'https-ramiro.org-index.html'),
+        ('https/ramiro.org/index.html', 'https-ramiro.org-index.html'),
     ]
     for t in tests:
         assert fscache.slugify(t[0]) == t[1]
