@@ -30,6 +30,9 @@ test: ## run tests quickly with the default Python
 test-all: ## run tests on every Python version with tox
 	tox
 
+typecheck:
+	mypy --ignore-missing-imports fscache
+
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source fscache -m pytest
 	coverage report -m
