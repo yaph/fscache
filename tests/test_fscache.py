@@ -31,17 +31,17 @@ def test_slugify():
         assert fscache.slugify(t[0]) == t[1]
 
 
-def test_path_default_cache_dir():
-    assert fscache.path('file.txt', create_dirs=False).as_posix() == f'{user_cache_dir("fscache")}/file.txt'
-
-
-def test_path_url():
+def test_create_id():
     tests = [
-        ('https://www.youtube.com/watch?v=HEOxdMWxIBM', f'{cache_dir}/https/www.youtube.com/watch-v-HEOxdMWxIBM'),
-        ('https://ramiro.org/vis/index.html', f'{cache_dir}/https/ramiro.org/vis/index.html')
+        ('https://www.youtube.com/watch?v=HEOxdMWxIBM', 'https/www.youtube.com/watch-v-HEOxdMWxIBM'),
+        ('https://ramiro.org/vis/index.html', 'https/ramiro.org/vis/index.html')
     ]
     for t in tests:
-        assert fscache.path(t[0], cache_dir=cache_dir, create_dirs=False).as_posix() == t[1]
+        assert fscache.create_id(t[0]) == t[1]
+
+
+def test_path_default_cache_dir():
+    assert fscache.path('file.txt', create_dirs=False).as_posix() == f'{user_cache_dir("fscache")}/file.txt'
 
 
 # Run these last

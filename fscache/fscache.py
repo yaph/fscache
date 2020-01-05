@@ -31,7 +31,7 @@ def create_id(s: str, sep: str = '/') -> str:
     Set `sep` to a valid directory separator to create sub directories as they occur in the string.
     """
     if sep and sep in s:
-        return sep.join([slugify(part) for part in s.split(sep)])
+        return sep.join([slugify(part) for part in s.split(sep) if part])
     return slugify(s)
 
 
@@ -84,14 +84,14 @@ def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
         The Path object representing the cache file.
 
     mode
-        If `mode` is not set a text file is assumed. Set `mode` to `bytes` for binary files like images or PDF files.
+        If `mode` is not set a text file is assumed. Set `mode` to `binary` for binary files like images or PDF files.
         Set to `json` to deserialize the file content into a Python object.
 
     unsafe
         This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
         is decoded using `jsonpickle` which can execute arbitrary Python code.
     """
-    if mode == 'bytes':
+    if mode == 'binary':
         return cache_file.read_bytes()
 
     content = cache_file.read_text()
@@ -112,15 +112,18 @@ def save(cache_file: Path, data: Any, *, mode: str = None, unsafe: bool = False)
     cache_file
         The Path object representing the cache file.
 
+    data
+        The data to store in the cache file.
+
     mode
-        If `mode` is not set a text file is assumed. Set `mode` to `bytes` for binary files like images or PDF files.
+        If `mode` is not set a text file is assumed. Set `mode` to `binary` for binary files like images or PDF files.
         Set to `json` to serialize the data.
 
     unsafe
         This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
         is encoded using `jsonpickle`. This is useful when the data contains Python objects like datetimes and sets.
     """
-    if mode == 'bytes':
+    if mode == 'binary':
         cache_file.write_bytes(data)
     else:
         content = None
