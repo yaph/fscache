@@ -50,14 +50,17 @@ def path(
         A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric
         characters, underscore and period. If it contains the directory separator `/` sub directories will be created
         appropriately. Other characters will be replaced with a hyphen, which can result in name collisions.
+
     alpha_index
         If set to `name` this will create an alphabetical directory index, which is useful for adding more structure
         when storing many cache files, that have meaningful names mostly starting with ASCII letters. The first
         character of the file name will be used to create an additional directory to store the file in. Files that
         don't start with an ASCII letter are stored in the `_` directory.
+
     cache_dir
         An optional base directory for storing cache files. If set and the directory does not exist an exception is
         raised. Otherwise files will be stored in the `fscache` directory in the operating system user cache directory.
+
     create_dirs
         An optional flag to control directory creation. By default directories determined from the cache ID will be
         created as needed. Set this to `False` to prevent directory creation. Useful if you know the cache directory
@@ -113,7 +116,7 @@ def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
     return content
 
 
-def save(cache_file: Path, data: Any, *, mode: str = None, unsafe: bool = False):
+def save(cache_file: Path, content: Any, *, mode: str = None, unsafe: bool = False):
     """Save data in cache file.
 
     Parameters
@@ -121,8 +124,8 @@ def save(cache_file: Path, data: Any, *, mode: str = None, unsafe: bool = False)
     cache_file
         The Path object representing the cache file.
 
-    data
-        The data to store in the cache file.
+    content
+        The content to store in the cache file.
 
     mode
         If `mode` is not set a text file is assumed. Set `mode` to `binary` for binary files like images or PDF files.
@@ -133,14 +136,13 @@ def save(cache_file: Path, data: Any, *, mode: str = None, unsafe: bool = False)
         is encoded using `jsonpickle`. This is useful when the data contains Python objects like datetimes and sets.
     """
     if mode == 'binary':
-        cache_file.write_bytes(data)
+        cache_file.write_bytes(content)
     else:
-        content = None
         if mode == 'json':
             if unsafe:
-                content = jsonpickle.encode(data)
+                content = jsonpickle.encode(content)
             else:
-                content = json.dumps(data)
+                content = json.dumps(content)
         cache_file.write_text(content)
 
 
