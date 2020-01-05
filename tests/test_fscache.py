@@ -43,7 +43,8 @@ def test_path_alpha_index():
     tests = [
         ('alpha.txt', f'{cache_dir}/a/alpha.txt'),
         ('álpha.txt', f'{cache_dir}/_/álpha.txt'),
-        ('0-zero.txt', f'{cache_dir}/_/0-zero.txt')
+        ('0-zero.txt', f'{cache_dir}/_/0-zero.txt'),
+        ('bands/bad-brains.html', f'{cache_dir}/bands/b/bad-brains.html')
     ]
     for t in tests:
         assert fscache.path(t[0], alpha_index='name', cache_dir=cache_dir, create_dirs=False).as_posix() == t[1]
