@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import json
-
 from string import ascii_lowercase
 
 from appdirs import user_cache_dir
 
 from fscache import fscache
+
 
 cache_dir = '.fscache'
 data = list(ascii_lowercase)
@@ -38,6 +37,16 @@ def test_create_id():
     ]
     for t in tests:
         assert fscache.create_id(t[0]) == t[1]
+
+
+def test_path_alpha_index():
+    tests = [
+        ('alpha.txt', f'{cache_dir}/a/alpha.txt'),
+        ('álpha.txt', f'{cache_dir}/_/álpha.txt'),
+        ('0-zero.txt', f'{cache_dir}/_/0-zero.txt')
+    ]
+    for t in tests:
+        assert fscache.path(t[0], alpha_index='name', cache_dir=cache_dir, create_dirs=False).as_posix() == t[1]
 
 
 def test_path_default_cache_dir():

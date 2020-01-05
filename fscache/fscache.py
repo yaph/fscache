@@ -7,6 +7,7 @@ import jsonpickle
 
 from datetime import datetime, timedelta
 from pathlib import Path
+from string import ascii_lowercase
 from typing import Any
 
 from appdirs import user_cache_dir
@@ -38,7 +39,7 @@ def create_id(s: str, sep: str = '/') -> str:
 def path(
         cache_id: str,
         *,  # keyword-only arguments
-        alpha_index: bool = False,
+        alpha_index: str = None,
         cache_dir: str = '',
         create_dirs: bool = True) -> Path:
     """Return a pathlib.Path object pointing to the cache file.
@@ -70,6 +71,13 @@ def path(
         cache_dir = user_cache_dir('fscache')
 
     cache_path = Path(cache_dir, create_id(cache_id))
+
+    if alpha_index == 'name':
+        first = cache_path.name.lower()[0]
+        if first not in ascii_lowercase:
+            first = '_'
+        cache_path = Path(cache_path.parent, first, cache_path.name)
+
     if create_dirs:
         cache_path.parent.mkdir(exist_ok=True, parents=True)
 
