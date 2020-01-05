@@ -46,20 +46,21 @@ def path(
     Parameters
     ----------
     cache_id
-        A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
-        underscore and period. If it contains the directory separator `/` sub directories will be created appropriately. Other
-        characters will be replaced with a hyphen, which can result in name collisions.
+        A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric
+        characters, underscore and period. If it contains the directory separator `/` sub directories will be created
+        appropriately. Other characters will be replaced with a hyphen, which can result in name collisions.
 
     alpha_index
         TODO
 
     cache_dir
-        An optional base directory for storing cache files. If set and the directory does not exist an exception is raised.
-        If not set files will be stored in the `fscache` directory in the operating system user cache directory.
+        An optional base directory for storing cache files. If set and the directory does not exist an exception is
+        raised. Otherwise files will be stored in the `fscache` directory in the operating system user cache directory.
 
     create_dirs
-        An optional flag to control directory creation. By default directories determined from the cache ID will be created as
-        needed. Set this to `False` to prevent directory creation. Useful if you know the cache directory exists and for tests.
+        An optional flag to control directory creation. By default directories determined from the cache ID will be
+        created as needed. Set this to `False` to prevent directory creation. Useful if you know the cache directory
+        exists and for tests.
     """
 
     if cache_dir and not Path(cache_dir).exists():
@@ -143,8 +144,8 @@ def valid(cache_file: Path, lifetime: int = None) -> bool:
     cache_file
         The Path object representing the cache file. Returns `False` if cache file doesn't exist.
     lifetime
-        An integer value in seconds. If not set and the cache file exists returns `True`. Otherwise the lifetime is compared to
-        the file modification time.
+        An integer value in seconds. If not set and the cache file exists returns `True`. Otherwise the lifetime is
+        compared to the file modification time.
     """
 
     if not cache_file.exists():
