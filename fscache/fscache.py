@@ -16,7 +16,7 @@ re_forbidden = re.compile(r'[^\.\w]+')
 
 
 def slugify(s: str) -> str:
-    """Return string with forbidden characters replaced by hyphens.
+    """Return string with forbidden characters replaced with hyphens.
 
     Consecutive forbidden characters are replaced with a single hyphen.
     Leading and trailing whitespace and hyphens are stripped.
@@ -46,19 +46,20 @@ def path(
     Parameters
     ----------
     cache_id
-        TODO A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
-        underscore and period. Other characters will be replaced with a hyphen, which can result in name collisions.
+        A unique string for identifying cache files. It is used as the file name and should only contain alphanumeric characters,
+        underscore and period. If it contains the directory separator `/` sub directories will be created appropriately. Other
+        characters will be replaced with a hyphen, which can result in name collisions.
 
     alpha_index
         TODO
 
     cache_dir
-        TODO An optional string to specify the directory for storing cache files. If set and the directory does not exist an exception
-        is raised. If not set files will be stored in the `fscache` directory within the operating system user cache directory.
+        An optional base directory for storing cache files. If set and the directory does not exist an exception is raised.
+        If not set files will be stored in the `fscache` directory in the operating system user cache directory.
 
     create_dirs
-        An optional flag to control directory creation. By default the cache directory and all parents will be created as needed.
-        Set this to `False` to prevent directory creation. Useful if you know the cache directory exists and for tests.
+        An optional flag to control directory creation. By default directories determined from the cache ID will be created as
+        needed. Set this to `False` to prevent directory creation. Useful if you know the cache directory exists and for tests.
     """
 
     if cache_dir and not Path(cache_dir).exists():
