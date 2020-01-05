@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from pathlib import Path
 from string import ascii_lowercase
-
-from appdirs import user_cache_dir
 
 from fscache import fscache
 
@@ -51,7 +50,7 @@ def test_path_alpha_index():
 
 
 def test_path_default_cache_dir():
-    assert fscache.path('file.txt', create_dirs=False).as_posix() == f'{user_cache_dir("fscache")}/file.txt'
+    assert fscache.path('file.txt', create_dirs=False).as_posix() == Path(Path.home(), '.fscache/file.txt').as_posix()
 
 
 # Run these last
