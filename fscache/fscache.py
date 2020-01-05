@@ -10,8 +10,6 @@ from pathlib import Path
 from string import ascii_lowercase
 from typing import Any
 
-from appdirs import user_cache_dir
-
 
 re_forbidden = re.compile(r'[^\.\w]+')
 
@@ -59,7 +57,7 @@ def path(
 
     cache_dir
         An optional base directory for storing cache files. If set and the directory does not exist an exception is
-        raised. Otherwise files will be stored in the `fscache` directory in the operating system user cache directory.
+        raised. Otherwise files will be stored in the `.fscache` directory in the user's home directory.
 
     create_dirs
         An optional flag to control directory creation. By default directories determined from the cache ID will be
@@ -71,7 +69,7 @@ def path(
         raise FileNotFoundError('Cache directory does not exist: ' + cache_dir)
 
     if not cache_dir:
-        cache_dir = user_cache_dir('fscache')
+        cache_dir = Path(Path.home(), '.fscache').as_posix()
 
     cache_path = Path(cache_dir, create_id(cache_id))
 
