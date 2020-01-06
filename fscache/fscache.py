@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
-# A Python package for caching data in the file system.
+"""A Python package for caching data in the file system."""
+
 import json
 import re
 
-import jsonpickle
+# import jsonpickle
 
 from datetime import datetime, timedelta
 from pathlib import Path
 from string import ascii_lowercase
 from typing import Any
+
+from .encoder import JSONEncoder
 
 
 re_forbidden = re.compile(r'[^\.\w]+')
@@ -140,7 +143,7 @@ def save(cache_file: Path, content: Any, *, mode: str = None, unsafe: bool = Fal
             if unsafe:
                 content = jsonpickle.encode(content)
             else:
-                content = json.dumps(content)
+                content = json.dumps(content, cls=JSONEncoder)
         cache_file.write_text(content)
 
 

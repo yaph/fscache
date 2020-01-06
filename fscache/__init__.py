@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """Top-level package for fscache."""
 
 __author__ = """Ramiro Gómez"""
