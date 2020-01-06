@@ -3,6 +3,7 @@
 import decimal
 import uuid
 
+from array import array
 from datetime import datetime
 from dateutil import parser
 
@@ -12,6 +13,7 @@ from fscache import fscache
 cache_dir = '.fscache'
 cache_file = fscache.path('test_content.json', cache_dir=cache_dir)
 content = {
+    'array': array('I', [1, 2, 3]),  # has 'tolist' attr
     'bytes': b'abc',
     'datetime': datetime.now(),
     'decimal': decimal.Decimal(10),
@@ -33,3 +35,5 @@ def test_load():
     assert content['decimal'] == decimal.Decimal(cached['decimal'])
     assert content['set'] == set(cached['set'])
     assert content['uuid'] == uuid.UUID(cached['uuid'])
+
+    assert list(content['array']) == cached['array']
