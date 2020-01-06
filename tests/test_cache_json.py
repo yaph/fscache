@@ -26,9 +26,9 @@ def test_save():
 
 
 def test_load():
-    cached_content = fscache.load(cache_file, mode='json')
-    assert content['bytes'] == cached_content['bytes'].encode()
-    assert content['datetime'] == datetime.fromisoformat(cached_content['datetime'])
-    assert content['decimal'] == decimal.Decimal(cached_content['decimal'])
-    assert content['set'] == set(cached_content['set'])
-    assert content['uuid'] == uuid.UUID(cached_content['uuid'])
+    cached = fscache.load(cache_file, mode='json')
+    assert content['bytes'] == cached['bytes'].encode()
+    assert content['datetime'] == datetime.fromisoformat(cached['datetime'])
+    assert content['decimal'] == decimal.Decimal(cached['decimal'])
+    assert content['set'] == set(cached['set'])
+    assert content['uuid'] == uuid.UUID(cached['uuid'])
