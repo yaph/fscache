@@ -1,20 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from pathlib import Path
-from string import ascii_lowercase
 
 from fscache import fscache
 
 
 cache_dir = '.fscache'
-data = list(ascii_lowercase)
 cache_file = fscache.path('test_fscache.json', cache_dir=cache_dir)
-
-
-# Create a cache file first.
-def test_save():
-    fscache.save(cache_file, data, mode='json')
-    assert cache_file.exists()
 
 
 def test_slugify():
@@ -51,12 +43,3 @@ def test_path_alpha_index():
 
 def test_path_default_cache_dir():
     assert fscache.path('file.txt', create_dirs=False).as_posix() == Path(Path.home(), '.fscache/file.txt').as_posix()
-
-
-# Run these last
-def test_valid():
-    assert fscache.valid(cache_file, lifetime=3600)
-
-
-def test_load():
-    assert fscache.load(cache_file, mode='json') == data
