@@ -4,6 +4,7 @@ import decimal
 import uuid
 
 from datetime import datetime
+from dateutil import parser
 
 from fscache import fscache
 
@@ -28,7 +29,7 @@ def test_save():
 def test_load():
     cached = fscache.load(cache_file, mode='json')
     assert content['bytes'] == cached['bytes'].encode()
-    assert content['datetime'] == datetime.fromisoformat(cached['datetime'])
+    assert content['datetime'] == parser.isoparse(cached['datetime'])  # datetime.fromisoformat requires Python 3.7
     assert content['decimal'] == decimal.Decimal(cached['decimal'])
     assert content['set'] == set(cached['set'])
     assert content['uuid'] == uuid.UUID(cached['uuid'])

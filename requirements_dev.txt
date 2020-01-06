@@ -4,6 +4,7 @@ ipython
 mypy
 pytest
 pytest-runner
+python-dateutil
 tox
 twine
 wheel
