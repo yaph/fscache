@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import decimal
+import uuid
 
 from datetime import datetime
 
@@ -13,7 +14,8 @@ content = {
     'bytes': b'abc',
     'datetime': datetime.now(),
     'decimal': decimal.Decimal(10),
-    'set': set('abc')
+    'set': set('abc'),
+    'uuid': uuid.uuid1()
 }
 
 
@@ -29,3 +31,4 @@ def test_load():
     assert content['datetime'] == datetime.fromisoformat(cached_content['datetime'])
     assert content['decimal'] == decimal.Decimal(cached_content['decimal'])
     assert content['set'] == set(cached_content['set'])
+    assert content['uuid'] == uuid.UUID(cached_content['uuid'])

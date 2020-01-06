@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
 
+from pytest import raises
+
 from fscache import fscache
 
 
@@ -43,3 +45,8 @@ def test_path_alpha_index():
 
 def test_path_default_cache_dir():
     assert fscache.path('file.txt', create_dirs=False).as_posix() == Path(Path.home(), '.fscache/file.txt').as_posix()
+
+
+def test_cache_dir_not_exists():
+    with raises(FileNotFoundError):
+        fscache.path('file.txt', cache_dir='404', create_dirs=False)
