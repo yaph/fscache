@@ -2,21 +2,18 @@
 # -*- coding: utf-8 -*-
 import decimal
 
-from collections import namedtuple
 from datetime import datetime
 
 from fscache import fscache
 
 
-Point = namedtuple('Point', ['x', 'y'])
 cache_dir = '.fscache'
 cache_file = fscache.path('test_content.json', cache_dir=cache_dir)
 content = {
-    'set': set('abc'),
+    'bytes': b'abc',
     'datetime': datetime.now(),
     'decimal': decimal.Decimal(10),
-    'tuple': (1, 2),
-    'namedtuple': Point(1, 2)
+    'set': set('abc')
 }
 
 
@@ -28,8 +25,7 @@ def test_save():
 
 def test_load():
     cached_content = fscache.load(cache_file, mode='json')
-    assert content['set'] == set(cached_content['set'])
+    assert content['bytes'] == cached_content['bytes'].encode()
     assert content['datetime'] == datetime.fromisoformat(cached_content['datetime'])
     assert content['decimal'] == decimal.Decimal(cached_content['decimal'])
-    assert content['tuple'] == tuple(cached_content['tuple'])
-    assert content['namedtuple'] == Point(*cached_content['namedtuple'])
+    assert content['set'] == set(cached_content['set'])

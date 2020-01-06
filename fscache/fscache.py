@@ -4,8 +4,6 @@
 import json
 import re
 
-# import jsonpickle
-
 from datetime import datetime, timedelta
 from pathlib import Path
 from string import ascii_lowercase
@@ -99,25 +97,18 @@ def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
     mode
         If `mode` is not set a text file is assumed. Set `mode` to `binary` for binary files like images or PDF files.
         Set to `json` to deserialize the file content into a Python object.
-
-    unsafe
-        This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
-        is decoded using `jsonpickle` which can execute arbitrary Python code.
     """
     if mode == 'binary':
         return cache_file.read_bytes()
 
     content = cache_file.read_text()
     if mode == 'json':
-        if unsafe:
-            content = jsonpickle.decode(content)
-        else:
-            content = json.loads(content)
+        content = json.loads(content)
 
     return content
 
 
-def save(cache_file: Path, content: Any, *, mode: str = None, unsafe: bool = False):
+def save(cache_file: Path, content: Any, *, mode: str = None):
     """Save data in cache file.
 
     Parameters
@@ -131,19 +122,12 @@ def save(cache_file: Path, content: Any, *, mode: str = None, unsafe: bool = Fal
     mode
         If `mode` is not set a text file is assumed. Set `mode` to `binary` for binary files like images or PDF files.
         Set to `json` to serialize the data.
-
-    unsafe
-        This only applies to `json` mode. If `False` Python's built-in `json` module will be used. If `True` content
-        is encoded using `jsonpickle`. This is useful when the data contains Python objects like datetimes and sets.
     """
     if mode == 'binary':
         cache_file.write_bytes(content)
     else:
         if mode == 'json':
-            if unsafe:
-                content = jsonpickle.encode(content)
-            else:
-                content = json.dumps(content, cls=JSONEncoder)
+            content = json.dumps(content, cls=JSONEncoder)
         cache_file.write_text(content)
 
 

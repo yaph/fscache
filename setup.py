@@ -5,7 +5,6 @@ from setuptools import setup, find_packages
 from fscache import __version__
 
 
-install_requirements = Path('requirements.txt').read_text().splitlines()
 test_requirements = Path('requirements_dev.txt').read_text().splitlines()
 
 setup(
@@ -24,7 +23,6 @@ setup(
     license='MIT license',
     long_description=Path('README.md').read_text(),
     include_package_data=True,
-    install_requires=install_requirements,
     keywords='cache, caching, file system',
     name='fscache',
     packages=find_packages(include=['fscache']),
