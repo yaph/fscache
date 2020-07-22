@@ -12,17 +12,22 @@ from typing import Any
 from .encoder import JSONEncoder
 
 
-re_forbidden = re.compile(r'[^\.\w]+')
+re_forbidden = re.compile(r'[^\.\w-]+')
+re_ws = re.compile(r'\s+')
+re_hyphen = re.compile(r'-+')
 
 
 def slugify(s: str) -> str:
     """Return string with forbidden characters replaced with hyphens.
 
     Consecutive forbidden characters are replaced with a single hyphen.
-    Leading and trailing whitespace and hyphens are stripped.
+    Leading and trailing whitespace is stripped.
     Different input strings may result in the same output.
     """
-    return re.sub(re_forbidden, '-', s.strip()).strip('-')
+
+    s_allowed = re.sub(re_forbidden, ' ', s.strip()).strip()
+    s_hyphenated = re.sub(re_ws, '-', s_allowed)
+    return re.sub(re_hyphen, '-', s_hyphenated)
 
 
 def create_id(s: str, sep: str = '/') -> str:

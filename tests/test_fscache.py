@@ -18,6 +18,7 @@ def test_slugify():
         ('Gómez', 'Gómez'),
         ('https://ramiro.org/index.html', 'https-ramiro.org-index.html'),
         ('https/ramiro.org/index.html', 'https-ramiro.org-index.html'),
+        ('-o2OEbUiPDs', '-o2OEbUiPDs'),
     ]
     for t in tests:
         assert fscache.slugify(t[0]) == t[1]
