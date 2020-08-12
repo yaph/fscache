@@ -38,9 +38,6 @@ coverage: ## check code coverage quickly with the default Python
 	coverage run --source fscache -m pytest
 	coverage report -m
 
-release: dist ## package and upload a release
-	twine upload dist/*
-
 dist: clean ## builds source and wheel package
 	python setup.py sdist
 	python setup.py bdist_wheel
@@ -54,3 +51,9 @@ install-test:
 
 install-all: install install-test
 	pip install -r requirements_dev.txt
+
+# Package and upload a release. Call example: make release version=0.2.0
+release: dist
+	git tag -a $(version) -m 'Create version $(version)'
+	git push --tags
+	twine upload dist/*
