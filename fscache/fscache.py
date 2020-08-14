@@ -20,14 +20,11 @@ re_hyphen = re.compile(r'-+')
 def slugify(s: str) -> str:
     """Return string with forbidden characters replaced with hyphens.
 
-    Consecutive forbidden characters are replaced with a single hyphen.
     Leading and trailing whitespace is stripped.
     Different input strings may result in the same output.
     """
 
-    s_allowed = re.sub(re_forbidden, ' ', s.strip()).strip()
-    s_hyphenated = re.sub(re_ws, '-', s_allowed)
-    return re.sub(re_hyphen, '-', s_hyphenated)
+    return re.sub(re_forbidden, ' ', s.strip()).strip().replace(' ', '-')
 
 
 def create_id(s: str, sep: str = '/') -> str:

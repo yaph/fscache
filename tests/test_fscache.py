@@ -15,7 +15,7 @@ def test_slugify():
     tests = [
         ('äöüß', 'äöüß'),
         ('áéíóúñ', 'áéíóúñ'),
-        ('a - b', 'a-b'),
+        ('a - b', 'a---b'),
         ('/path/to/data.json', 'path-to-data.json'),
         ('Gómez', 'Gómez'),
         ('https://ramiro.org/index.html', 'https-ramiro.org-index.html'),
@@ -29,7 +29,7 @@ def test_slugify():
 def test_create_id():
     tests = [
         ('https://www.youtube.com/watch?v=HEOxdMWxIBM', 'https/www.youtube.com/watch-v-HEOxdMWxIBM'),
-        ('https://www.youtube.com/watch?v=-o2OEbUiPDs', 'https/www.youtube.com/watch-v-o2OEbUiPDs'),
+        ('https://www.youtube.com/watch?v=-o2OEbUiPDs', 'https/www.youtube.com/watch-v--o2OEbUiPDs'),
         ('https://ramiro.org/vis/index.html', 'https/ramiro.org/vis/index.html')
     ]
     for t in tests:

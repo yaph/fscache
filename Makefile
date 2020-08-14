@@ -52,7 +52,7 @@ install-test:
 install-all: install install-test
 	pip install -r requirements_dev.txt
 
-# Package and upload a release. Call example: make release version=0.2.0
+# Package and upload a release. Call example: make release version=0.3.0
 release: dist
 	git tag -a $(version) -m 'Create version $(version)'
 	git push --tags
