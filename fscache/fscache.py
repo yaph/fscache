@@ -40,7 +40,7 @@ def create_id(s: str, sep: str = '/') -> str:
 def path(
         cache_id: str,
         *,  # keyword-only arguments
-        alpha_index: str = None,
+        alpha_index: str = '',
         cache_dir: str = '',
         create_dirs: bool = True) -> Path:
     """Return a pathlib.Path object pointing to the cache file.
@@ -68,27 +68,28 @@ def path(
         exists and for tests.
     """
 
-    if cache_dir and not Path(cache_dir).exists():
-        raise FileNotFoundError('Cache directory does not exist: ' + cache_dir)
+    if cache_dir:
+        p_cache = Path(cache_dir).expanduser()
+        if not p_cache.exists():
+            raise FileNotFoundError(f'Cache directory does not exist: {p_cache.absolute()}')
+    else:
+        p_cache = Path(Path.home(), '.fscache')
 
-    if not cache_dir:
-        cache_dir = Path(Path.home(), '.fscache').as_posix()
-
-    cache_path = Path(cache_dir, create_id(cache_id))
+    p_cache = p_cache / create_id(cache_id)
 
     if alpha_index == 'name':
-        first = cache_path.name.lower()[0]
+        first = p_cache.name.lower()[0]
         if first not in ascii_lowercase:
             first = '_'
-        cache_path = Path(cache_path.parent, first, cache_path.name)
+        p_cache = p_cache.parent.joinpath(first, p_cache.name)
 
     if create_dirs:
-        cache_path.parent.mkdir(exist_ok=True, parents=True)
+        p_cache.parent.mkdir(exist_ok=True, parents=True)
 
-    return cache_path
+    return p_cache
 
 
-def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
+def load(cache_file: Path, *, mode: str = '', unsafe: bool = False):
     """Return the content of the cache file.
 
     Parameters
@@ -110,7 +111,7 @@ def load(cache_file: Path, *, mode: str = None, unsafe: bool = False):
     return content
 
 
-def save(cache_file: Path, content: Any, *, mode: str = None):
+def save(cache_file: Path, content: Any, *, mode: str = ''):
     """Save data in cache file.
 
     Parameters
@@ -133,7 +134,7 @@ def save(cache_file: Path, content: Any, *, mode: str = None):
         cache_file.write_text(content)
 
 
-def valid(cache_file: Path, lifetime: int = None) -> bool:
+def valid(cache_file: Path, lifetime: int | None = None) -> bool:
     """Check whether cache file is valid.
 
     Parameters
